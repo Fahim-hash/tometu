@@ -6,159 +6,94 @@
     <title>tometu. | iykyk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #050505; 
-            overflow: hidden;
-        }
-        
-        /* Premium Glass Effect */
+        body { font-family: 'Inter', sans-serif; background-color: #050505; overflow: hidden; }
         .glass-card { 
-            background: rgba(20, 20, 20, 0.4); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 40px 100px rgba(0,0,0,0.6);
         }
-        
-        /* Subtle Glow Behind the Card */
         .bg-glow { 
-            position: absolute; 
-            width: 600px; 
-            height: 600px; 
-            background: radial-gradient(circle, rgba(255,69,0,0.15) 0%, rgba(0,0,0,0) 60%); 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: -1; 
-            pointer-events: none; 
+            position: absolute; width: 500px; height: 500px; 
+            background: radial-gradient(circle, rgba(255,69,0,0.12) 0%, rgba(0,0,0,0) 70%); 
+            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1; 
         }
-
-        /* Cool Animation for the Play Button */
-        @keyframes pulse-ring { 
-            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); } 
-            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 69, 0, 0); } 
-            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); } 
-        }
-        .playing-pulse { animation: pulse-ring 2s infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-5)px; opacity: 0.8; } }
+        .coming-soon { animation: float 3s ease-in-out infinite; }
         
-        /* Spinning Record effect for Spotify */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .spin-slow { animation: spin 8s linear infinite; }
+        /* Play Button Pulse */
+        @keyframes pulse-ring { 
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.5); } 
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); } 
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); } 
+        }
+        .is-playing { animation: pulse-ring 2s infinite; background: #ff4500 !important; color: white !important; }
     </style>
 </head>
-<body class="text-white min-h-screen flex items-center justify-center relative p-4 selection:bg-orange-500">
+<body class="text-white min-h-screen flex flex-col items-center justify-center relative p-4 selection:bg-orange-500">
 
     <div class="bg-glow"></div>
 
-    <div class="glass-card w-full max-w-sm rounded-[2.5rem] p-8 relative transform transition-all duration-500 hover:-translate-y-2 group">
+    <div class="glass-card w-full max-w-sm rounded-[2.5rem] p-8 relative z-10 transition-all duration-700">
         
         <div class="flex justify-between items-start mb-8">
-            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-orange-500 to-red-600 p-[2px] shadow-[0_0_20px_rgba(255,69,0,0.3)]">
-                <div class="w-full h-full bg-[#111] rounded-full flex items-center justify-center text-xl">
-                    🍅
-                </div>
+            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-orange-600 to-red-600 p-[2px] shadow-lg shadow-orange-900/20">
+                <div class="w-full h-full bg-[#0a0a0a] rounded-full flex items-center justify-center text-xl">🍅</div>
             </div>
-            <div id="greeting-badge" class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-400 backdrop-blur-sm">
-                ...
-            </div>
+            <div id="greeting" class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-widest uppercase text-gray-400">...</div>
         </div>
 
-        <h1 class="text-4xl font-black tracking-tighter mb-1 text-white">tometu<span class="text-orange-500">.</span></h1>
-        <p class="text-gray-400 text-sm mb-8 font-light italic">"iykyk. Welcome to my chaos."</p>
+        <h1 class="text-5xl font-black tracking-tighter mb-1">tometu<span class="text-orange-600">.</span></h1>
+        <p class="text-gray-500 text-sm mb-10 font-medium italic">"iykyk. stay tuned."</p>
 
-        <div class="bg-black/40 rounded-2xl p-4 border border-white/5 mb-4 cursor-pointer hover:bg-black/60 transition-all duration-300" onclick="togglePlay()">
-            <div class="flex items-center gap-4">
-                <div id="play-btn-bg" class="w-12 h-12 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center transition-all duration-300">
+        <div class="bg-black/60 rounded-3xl p-5 border border-white/5 cursor-pointer group hover:border-orange-500/30 transition-all" onclick="togglePlay()">
+            <div class="flex items-center gap-5">
+                <div id="play-btn" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center transition-all text-orange-500">
                     <i id="play-icon" class="fas fa-play ml-1"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] text-orange-400 font-bold uppercase tracking-widest mb-0.5">Lifetime Vibe</p>
-                    <p class="text-sm font-medium text-gray-200">The Tometu Anthem</p>
+                    <p class="text-[10px] text-orange-500 font-bold uppercase tracking-[0.2em] mb-1">On Repeat</p>
+                    <p class="text-sm font-bold text-gray-200">The Tometu Theme</p>
                 </div>
             </div>
-            <audio id="lifetime-audio" src="YOUR_MP3_DIRECT_LINK_HERE"></audio>
+            <audio id="main-audio" loop>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            </audio>
         </div>
-
-        <div id="spotify-card" class="bg-[#1DB954]/10 rounded-2xl p-4 border border-[#1DB954]/20 hidden items-center gap-4 transition-all">
-            <img id="sp-art" src="" class="w-12 h-12 rounded-full shadow-lg spin-slow border border-[#1DB954]/50">
-            <div class="overflow-hidden">
-                <p class="text-[9px] text-[#1DB954] font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1">
-                    <i class="fab fa-spotify"></i> Now Playing
-                </p>
-                <p id="sp-track" class="text-sm font-bold text-white truncate w-40"></p>
-                <p id="sp-artist" class="text-xs text-gray-400 truncate w-40"></p>
-            </div>
-        </div>
-
     </div>
 
-    <div class="absolute bottom-5 right-5 w-8 h-8 opacity-0 hover:opacity-100 cursor-pointer flex items-center justify-center transition-opacity" onclick="document.body.style.filter = 'invert(1)'; setTimeout(()=>document.body.style.filter='none', 2000)">
-        👻
+    <div class="mt-8 text-center">
+        <p class="coming-soon text-[11px] font-bold tracking-[0.4em] uppercase text-gray-600">Full Experience Coming Soon</p>
+        <div class="mt-2 flex justify-center gap-4 text-gray-700 text-xs">
+            <i class="fab fa-github hover:text-white transition-colors cursor-pointer"></i>
+            <i class="fab fa-instagram hover:text-white transition-colors cursor-pointer"></i>
+            <i class="fab fa-discord hover:text-white transition-colors cursor-pointer"></i>
+        </div>
     </div>
 
     <script>
-        // --- 1. Dynamic Greeting ---
-        if (Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Dhaka') {
-            document.getElementById('greeting-badge').innerHTML = "Bhalo achen? <span class='animate-wave inline-block'>👋</span>";
-        } else {
-            document.getElementById('greeting-badge').innerText = "What's up? 🌍";
-        }
+        // Greeting Logic
+        const greet = document.getElementById('greeting');
+        greet.innerText = Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Dhaka' ? "Bhalo achen? 👋" : "What's up? 🌍";
 
-        // --- 2. Custom Audio Player Logic ---
-        const audio = document.getElementById('lifetime-audio');
+        // Audio Logic
+        const audio = document.getElementById('main-audio');
+        const playBtn = document.getElementById('play-btn');
         const icon = document.getElementById('play-icon');
-        const btnBg = document.getElementById('play-btn-bg');
 
         function togglePlay() {
             if (audio.paused) {
                 audio.play();
-                // Change to Pause Icon & Add Pulse
-                icon.classList.remove('fa-play', 'ml-1');
-                icon.classList.add('fa-pause');
-                btnBg.classList.add('playing-pulse', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/50');
-                btnBg.classList.remove('bg-orange-500/10', 'text-orange-500');
+                icon.classList.replace('fa-play', 'fa-pause');
+                icon.classList.remove('ml-1');
+                playBtn.classList.add('is-playing');
             } else {
                 audio.pause();
-                // Revert to Play Icon
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play', 'ml-1');
-                btnBg.classList.remove('playing-pulse', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/50');
-                btnBg.classList.add('bg-orange-500/10', 'text-orange-500');
+                icon.classList.replace('fa-pause', 'fa-play');
+                icon.classList.add('ml-1');
+                playBtn.classList.remove('is-playing');
             }
         }
-
-        // --- 3. Spotify Status (Lanyard) ---
-        const discordID = "YOUR_DISCORD_ID_HERE"; // Put your Discord ID here
-        
-        async function fetchSpotify() {
-            if(discordID === "YOUR_DISCORD_ID_HERE") return; 
-            try {
-                const res = await fetch(`https://api.lanyard.rest/v1/users/${discordID}`);
-                const data = await res.json();
-                const spCard = document.getElementById('spotify-card');
-                
-                if (data.data && data.data.spotify) {
-                    const sp = data.data.spotify;
-                    document.getElementById('sp-art').src = sp.album_art_url;
-                    document.getElementById('sp-track').innerText = sp.track;
-                    document.getElementById('sp-artist').innerText = sp.artist;
-                    
-                    spCard.classList.remove('hidden');
-                    spCard.classList.add('flex');
-                } else {
-                    spCard.classList.add('hidden');
-                    spCard.classList.remove('flex');
-                }
-            } catch (e) { console.log(e); }
-        }
-
-        fetchSpotify();
-        setInterval(fetchSpotify, 5000);
     </script>
 </body>
 </html>
