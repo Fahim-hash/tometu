@@ -3,80 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tometu. | iykyk</title>
+    <title>tometu.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #050505; overflow: hidden; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: screen;
+        }
+        
+        /* Premium Glass Effect */
         .glass-card { 
-            background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            background: rgba(20, 20, 20, 0.4); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
         }
+        
+        /* Subtle Glow Behind the Card */
         .bg-glow { 
-            position: absolute; width: 500px; height: 500px; 
+            position: absolute; 
+            width: 500px; 
+            height: 500px; 
             background: radial-gradient(circle, rgba(255,69,0,0.12) 0%, rgba(0,0,0,0) 70%); 
-            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: -1; 
+            pointer-events: none; 
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-5)px; opacity: 0.8; } }
+
+        /* Coming Soon Animation */
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); opacity: 0.4; } 
+            50% { transform: translateY(-8px); opacity: 0.8; } 
+        }
         .coming-soon { animation: float 3s ease-in-out infinite; }
         
-        /* Play Button Pulse */
+        /* Custom Play Button Pulse when active */
         @keyframes pulse-ring { 
             0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.5); } 
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); } 
             100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); } 
         }
-        .is-playing { animation: pulse-ring 2s infinite; background: #ff4500 !important; color: white !important; }
+        .is-playing { 
+            animation: pulse-ring 2s infinite; 
+            background: #ea580c !important; /* orange-600 */
+            color: white !important; 
+        }
+
+        /* Wave Animation for Hand Emoji */
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+        .animate-wave { animation: wave 1s ease-in-out infinite; }
     </style>
 </head>
-<body class="text-white min-h-screen flex flex-col items-center justify-center relative p-4 selection:bg-orange-500">
+<body class="text-white min-h-screen relative p-4 selection:bg-orange-500">
 
     <div class="bg-glow"></div>
 
-    <div class="glass-card w-full max-w-sm rounded-[2.5rem] p-8 relative z-10 transition-all duration-700">
+    <div class="glass-card w-full max-w-sm rounded-[2.5rem] p-10 relative z-10 transition-all duration-700 hover:scale-[1.01]">
         
-        <div class="flex justify-between items-start mb-8">
-            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-orange-600 to-red-600 p-[2px] shadow-lg shadow-orange-900/20">
-                <div class="w-full h-full bg-[#0a0a0a] rounded-full flex items-center justify-center text-xl">🍅</div>
+        <div class="flex justify-between items-start mb-10">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-orange-600 to-red-700 p-[2px] shadow-lg shadow-orange-900/20">
+                <div class="w-full h-full bg-[#0a0a0a] rounded-full flex items-center justify-center text-xl shadow-inner">
+                    🍅
+                </div>
             </div>
-            <div id="greeting" class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-widest uppercase text-gray-400">...</div>
+            <div id="greeting-badge" class="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 backdrop-blur-md">
+                Connecting...
+            </div>
         </div>
 
-        <h1 class="text-5xl font-black tracking-tighter mb-1">tometu<span class="text-orange-600">.</span></h1>
-        <p class="text-gray-500 text-sm mb-10 font-medium italic">"iykyk. stay tuned."</p>
+        <h1 class="text-5xl font-black tracking-tighter mb-2">tometu<span class="text-orange-600">.</span></h1>
+        <p class="text-gray-500 text-sm mb-12 font-medium italic">"iykyk. stay tuned."</p>
 
-        <div class="bg-black/60 rounded-3xl p-5 border border-white/5 cursor-pointer group hover:border-orange-500/30 transition-all" onclick="togglePlay()">
+        <div class="bg-black/60 rounded-[2rem] p-5 border border-white/5 cursor-pointer group hover:border-orange-500/30 transition-all duration-500" onclick="togglePlay()">
             <div class="flex items-center gap-5">
-                <div id="play-btn" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center transition-all text-orange-500">
+                <div id="play-btn" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center transition-all duration-300 text-orange-500 group-hover:bg-white/10">
                     <i id="play-icon" class="fas fa-play ml-1"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] text-orange-500 font-bold uppercase tracking-[0.2em] mb-1">On Repeat</p>
-                    <p class="text-sm font-bold text-gray-200">The Tometu Theme</p>
+                    <p class="text-[10px] text-orange-600 font-bold uppercase tracking-[0.25em] mb-1">On Repeat</p>
+                    <p class="text-sm font-bold text-gray-200">The Tometu</p>
                 </div>
             </div>
-            <audio id="main-audio" loop>
-                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            
+            <audio id="main-audio" loop preload="auto">
+                <source src="assets/ssstik.io_1774868268255.mp3" type="audio/mpeg">
             </audio>
         </div>
     </div>
 
-    <div class="mt-8 text-center">
-        <p class="coming-soon text-[11px] font-bold tracking-[0.4em] uppercase text-gray-600">Full Experience Coming Soon</p>
-        <div class="mt-2 flex justify-center gap-4 text-gray-700 text-xs">
-            <i class="fab fa-github hover:text-white transition-colors cursor-pointer"></i>
-            <i class="fab fa-instagram hover:text-white transition-colors cursor-pointer"></i>
-            <i class="fab fa-discord hover:text-white transition-colors cursor-pointer"></i>
+    <div class="mt-12 text-center z-10">
+        <p class="coming-soon text-[10px] font-bold tracking-[0.5em] uppercase text-gray-600 mb-4">Full Experience Coming Soon</p>
+        <div class="flex justify-center gap-6 text-gray-700">
+            <a href="#" class="hover:text-orange-500 transition-colors duration-300"><i class="fab fa-github text-lg"></i></a>
+            <a href="#" class="hover:text-orange-500 transition-colors duration-300"><i class="fab fa-instagram text-lg"></i></a>
+            <a href="#" class="hover:text-orange-500 transition-colors duration-300"><i class="fab fa-discord text-lg"></i></a>
         </div>
     </div>
 
     <script>
-        // Greeting Logic
-        const greet = document.getElementById('greeting');
-        greet.innerText = Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Dhaka' ? "Bhalo achen? 👋" : "What's up? 🌍";
+        // --- Logic: Dynamic Greeting based on BD Timezone ---
+        const greetingBadge = document.getElementById('greeting-badge');
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        if (userTimezone === 'Asia/Dhaka') {
+            greetingBadge.innerHTML = "Bhalo achen? <span class='animate-wave inline-block'>👋</span>";
+        } else {
+            greetingBadge.innerHTML = "What's up? 🌍";
+        }
 
-        // Audio Logic
+        // --- Logic: Audio Control ---
         const audio = document.getElementById('main-audio');
         const playBtn = document.getElementById('play-btn');
         const icon = document.getElementById('play-icon');
