@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tometu. | interactive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300&display=swap');
+        
+        body { 
+            background: #000; 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            cursor: none; /* We will use a custom cursor */
+        }
+
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: #ff4500;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 10vw;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 69, 0, 0.3);
+            text-transform: uppercase;
+            transition: all 0.5s ease;
+        }
+
+        .title:hover {
+            color: #ff4500;
+            -webkit-text-stroke: 0px;
+            filter: drop-shadow(0 0 30px #ff4500);
+        }
+
+        /* Ambient Glow */
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <div id="custom-cursor"></div>
+    <div class="blob" id="blob"></div>
+
+    <div class="relative z-10 text-center">
+        <a href="/" class="text-[10px] tracking-[0.6em] text-gray-500 uppercase mb-8 block hover:text-white transition-all">← Back</a>
+        <h1 class="title select-none">TOMETU</h1>
+        <p class="text-[11px] tracking-[1em] text-orange-600 mt-4 font-light uppercase italic">The Designer's Playground</p>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        const blob = document.getElementById('blob');
+
+        // Custom Cursor movement
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Background blob follows mouse with delay
+            blob.animate({
+                left: `${e.clientX - 200}px`,
+                top: `${e.clientY - 200}px`
+            }, { duration: 3000, fill: "forwards" });
+        });
+
+        // Scale cursor on hoverable elements
+        document.querySelectorAll('a, h1').forEach(el => {
+            el.onmouseenter = () => cursor.style.transform = 'scale(4)';
+            el.onmouseleave = () => cursor.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>
