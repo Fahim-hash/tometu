@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tometu. | terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+        body { 
+            background-color: #050505; 
+            color: #ff4500; 
+            font-family: 'Fira Code', monospace; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 2rem;
+        }
+        .cursor { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .output-line { margin-bottom: 0.5rem; opacity: 0.8; }
+        input { background: transparent; border: none; outline: none; color: white; width: 100%; }
+        .terminal-container { border: 1px solid rgba(255, 69, 0, 0.2); background: rgba(255, 69, 0, 0.02); }
+    </style>
+</head>
+<body class="selection:bg-orange-600 selection:text-black">
+
+    <div class="max-w-3xl w-full mx-auto mt-10">
+        <div class="flex justify-between items-center mb-6">
+            <a href="/" class="text-[10px] tracking-[0.4em] uppercase text-gray-600 hover:text-white transition-all">← Back to Main</a>
+            <span class="text-[10px] font-bold text-orange-900 uppercase tracking-widest italic">System v1.0 - tometu</span>
+        </div>
+
+        <div class="terminal-container p-6 rounded-2xl shadow-2xl">
+            <div id="output" class="text-sm leading-relaxed mb-4 h-64 overflow-y-auto scrollbar-hide">
+                <p class="text-white font-bold mb-2">Welcome to Tometu Terminal.</p>
+                <p class="text-gray-500 italic mb-4 text-xs">Type 'help' to see available commands.</p>
+            </div>
+
+            <div class="flex gap-2 text-sm">
+                <span class="text-orange-600 font-bold">visitor@tometu:~$</span>
+                <input type="text" id="command-input" autofocus autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('command-input');
+        const output = document.getElementById('output');
+
+        const commands = {
+            'help': 'Available: whoami, secret, vibe, clear, status',
+            'whoami': 'You are a guest in the Tometu universe. iykyk.',
+            'secret': 'The real tometu was the friends we made along the way. 🍅',
+            'vibe': 'Current mood: [Coding in the dark with low-fi music]',
+            'status': 'System: Online | Feeling: Creative | Battery: 100%',
+            'clear': ''
+        };
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.toLowerCase().trim();
+                const newLine = document.createElement('div');
+                newLine.className = 'output-line';
+                
+                if (cmd === 'clear') {
+                    output.innerHTML = '';
+                } else if (commands[cmd]) {
+                    newLine.innerHTML = `<span class="text-orange-600">➜</span> <span class="text-white">${cmd}</span><br><span class="text-gray-400">${commands[cmd]}</span>`;
+                    output.appendChild(newLine);
+                } else if (cmd !== '') {
+                    newLine.innerHTML = `<span class="text-red-500">➜</span> Unknown command: ${cmd}`;
+                    output.appendChild(newLine);
+                }
+
+                input.value = '';
+                output.scrollTop = output.scrollHeight;
+            }
+        });
+
+        // Focus input on click anywhere
+        document.addEventListener('click', () => input.focus());
+    </script>
+</body>
+</html>
