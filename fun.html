@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tometu. | clicker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
+        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
+        
+        .tomato-btn {
+            transition: transform 0.1s active;
+            filter: drop-shadow(0 0 20px rgba(255, 69, 0, 0.2));
+        }
+        .tomato-btn:active { transform: scale(0.9); }
+
+        /* Floating points animation */
+        @keyframes float-up {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+        .point-popup {
+            position: absolute;
+            pointer-events: none;
+            animation: float-up 0.8s ease-out forwards;
+            font-weight: bold;
+            color: #ff4500;
+        }
+
+        /* Glitch effect for the score */
+        .glitch { animation: glitch 0.3s infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center relative">
+
+    <a href="index.html" class="absolute top-10 left-10 text-gray-600 hover:text-white transition-colors text-xs tracking-[0.3em] uppercase italic">
+        ← Back to Void
+    </a>
+
+    <div class="mb-10 text-center">
+        <p class="text-[10px] tracking-[0.5em] text-orange-600 uppercase font-bold mb-2">Tometu Points</p>
+        <h1 id="score" class="text-7xl font-black tracking-tighter">0</h1>
+    </div>
+
+    <button id="tomato" class="tomato-btn text-9xl outline-none select-none">
+        🍅
+    </button>
+
+    <p class="mt-16 text-gray-700 text-[10px] tracking-widest uppercase italic animate-pulse">
+        Click the tomato. See what happens.
+    </p>
+
+    <audio id="pop-sound" src="https://www.myinstants.com/media/sounds/pop-sound-effect_q97X99I.mp3"></audio>
+
+    <script>
+        let count = 0;
+        const scoreEl = document.getElementById('score');
+        const tomatoBtn = document.getElementById('tomato');
+        const sound = document.getElementById('pop-sound');
+
+        const randomEffects = [
+            () => document.body.style.backgroundColor = `hsl(${Math.random() * 360}, 50%, 5%)`,
+            () => scoreEl.classList.add('glitch'),
+            () => tomatoBtn.style.filter = `hue-rotate(${Math.random() * 360}deg) drop-shadow(0 0 30px red)`,
+            () => { 
+                const colors = ['#ff4500', '#ffffff', '#333'];
+                document.body.style.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+        ];
+
+        tomatoBtn.addEventListener('click', (e) => {
+            count++;
+            scoreEl.innerText = count;
+            
+            // Play sound
+            sound.currentTime = 0;
+            sound.play();
+
+            // Create floating point
+            const popup = document.createElement('div');
+            popup.innerText = '+1';
+            popup.className = 'point-popup';
+            popup.style.left = e.clientX + 'px';
+            popup.style.top = e.clientY + 'px';
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 800);
+
+            // Trigger Random Chaos every 5 clicks
+            if (count % 5 === 0) {
+                const effect = randomEffects[Math.floor(Math.random() * randomEffects.length)];
+                effect();
+            }
+
+            // Remove glitch after a bit
+            if (count % 10 === 0) {
+                setTimeout(() => scoreEl.classList.remove('glitch'), 500);
+            }
+        });
+    </script>
+</body>
+</html>
